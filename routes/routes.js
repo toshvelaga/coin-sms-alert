@@ -1,5 +1,6 @@
 const coinDataRoutes = require('./coinDataRoutes');
-const alarmRoutes = require('./alarmRoutes');
+// const alarmRoutes = require('./alarmRoutes');
+const smsRoutes = require('./smsRoutes');
 
 // Configure all routes here
 exports.configure = (app) => {
@@ -11,5 +12,6 @@ exports.configure = (app) => {
 
    // Add routes to the express app object
    coinDataRoutes.configure(app);
-   alarmRoutes.configure(app);
+//    alarmRoutes.configure(app);
+   smsRoutes.configure(app);
 };
