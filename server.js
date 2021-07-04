@@ -15,7 +15,9 @@ app.get('/', (req, res) => {
 // Requests to http://localhost:3000/api/coins will trigger a request to coin gecko API,
 // respond with a JSON object with coin prices, and log a message to the console.
 
-const url = 'https://api.coingecko.com/api/v3/coins/ethereum?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false'
+const url = 'https://api.coingecko.com/api/v3/coins/ethereum?localization=false&tickers=true&market_data=false&community_data=false&developer_data=false&sparkline=false'
+
+app.set('json spaces', 2)
 
 app.get('/api/coins', (req, res) => {
     axios.get(url, {
@@ -39,8 +41,8 @@ app.get('/api/coins', (req, res) => {
            console.log(`* ALARM * ${alarm.coinId}: $${latestCoinData.price_usd} is ${ alarm.thresholdDirection} threshold $${alarm.priceUsdThreshold}`);
        }
        // Return a JSON object of the CoinMarketCap API response
-       console.log(coinsData)
-       res.json(coinsData);
+       console.log(coinsData.tickers[1].converted_last.usd)
+       res.json(coinsData.tickers);
     })
     .catch(err => { 
         res.json(err)
