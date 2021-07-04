@@ -2,6 +2,7 @@ const _ = require('underscore');
 
 // const coinDataRepo = require('../dataAccess/repos/coinDataRepository');
 // const alarmRepo = require('../dataAccess/repos/alarmRepository');
+const smsService = require('../services/smsService');
 const axios = require('axios')
 // Import our new Alarm model
 const Alarm = require('../models/alarm');
@@ -22,6 +23,7 @@ function getCoinData(req, res, done) {
 
     const coin = 'ethereum'
     const url = `https://api.coingecko.com/api/v3/coins/${coin}?localization=false&tickers=true&market_data=false&community_data=false&developer_data=false&sparkline=false`
+    const priceThreshold = 2000
 
     axios.get(url, {})
     .then(response => { 
@@ -31,8 +33,8 @@ function getCoinData(req, res, done) {
         // Hardcode an Alarm with a low value to ensure alarm will trigger
         let alarm = new Alarm({
            coin_id: 'ethereum',
-           priceUsdThreshold: 1000.00,
-           thresholdDirection: 'over'
+           priceUsdThreshold: priceThreshold,
+           thresholdDirection: 'under'
        });
 
         // Find Bitcoin’s data object inside response collection
@@ -40,8 +42,19 @@ function getCoinData(req, res, done) {
 
        //  Log the alarm data to the console if the threshold is crossed
        if (latestCoinDataPrice && alarm.isTriggered(latestCoinDataPrice)) {
-           console.log(`* ALARM * ${coin}: $${latestCoinDataPrice} is ${ alarm.thresholdDirection} threshold $${alarm.priceUsdThreshold}`);
+            let message = `* ALARM * ${coin}: $${latestCoinDataPrice} is ${ alarm.thresholdDirection} threshold $${alarm.priceUsdThreshold}`
+            
+            smsService.sendSms(message, () => {
+                console.log(message);
+            });
+       } else if (latestCoinDataPrice && !alarm.isTriggered(latestCoinDataPrice)) {
+            let message = `The price of ${coin}: $${latestCoinDataPrice}`
+
+            smsService.sendSms(message, () => {
+                console.log(message);
+            });
        }
+
        // Return a JSON object of the CoinMarketCap API response
        console.log(coinsData.tickers[1].converted_last.usd)
        res.json(coinsData.tickers);
