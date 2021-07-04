@@ -9,11 +9,11 @@ class Alarm {
    }
 
    // Returns a boolean based on whether alarm threshold has been exceeded
-   isTriggered(latestCoinData) {
+   isTriggered(latestCoinDataPrice) {
        let isAlarmTriggered = false;
        switch (this.thresholdDirection) {
            case 'under':
-               isAlarmTriggered = latestCoinData.price_usd < this.priceUsdThreshold; break; case 'over': default: isAlarmTriggered = latestCoinData.price_usd > this.priceUsdThreshold;
+               isAlarmTriggered = latestCoinDataPrice < this.priceUsdThreshold; break; case 'over': default: isAlarmTriggered = latestCoinDataPrice > this.priceUsdThreshold;
                break;
        }
        return isAlarmTriggered;

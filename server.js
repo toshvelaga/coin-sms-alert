@@ -15,7 +15,9 @@ app.get('/', (req, res) => {
 // Requests to http://localhost:3000/api/coins will trigger a request to coin gecko API,
 // respond with a JSON object with coin prices, and log a message to the console.
 
-const url = 'https://api.coingecko.com/api/v3/coins/ethereum?localization=false&tickers=true&market_data=false&community_data=false&developer_data=false&sparkline=false'
+let coin = 'ethereum'
+
+const url = `https://api.coingecko.com/api/v3/coins/${coin}?localization=false&tickers=true&market_data=false&community_data=false&developer_data=false&sparkline=false`
 
 app.set('json spaces', 2)
 
@@ -34,11 +36,11 @@ app.get('/api/coins', (req, res) => {
        });
 
         // Find Bitcoin’s data object inside response collection
-       let latestCoinData = _.findWhere(coinsData, { id: alarm.coinId});
+       let latestCoinDataPrice = coinsData.tickers[1].converted_last.usd
 
        //  Log the alarm data to the console if the threshold is crossed
-       if (latestCoinData && alarm.isTriggered(latestCoinData)) {
-           console.log(`* ALARM * ${alarm.coinId}: $${latestCoinData.price_usd} is ${ alarm.thresholdDirection} threshold $${alarm.priceUsdThreshold}`);
+       if (latestCoinDataPrice && alarm.isTriggered(latestCoinDataPrice)) {
+           console.log(`* ALARM * ${coin}: $${latestCoinDataPrice} is ${ alarm.thresholdDirection} threshold $${alarm.priceUsdThreshold}`);
        }
        // Return a JSON object of the CoinMarketCap API response
        console.log(coinsData.tickers[1].converted_last.usd)
