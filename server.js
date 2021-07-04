@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 // Requests to http://localhost:3000/api/coins will trigger a request to CoinMarketCap API,
 // respond with a JSON object with coin prices, and log a message to the console.
 app.get('/api/coins', (req, res) => {
-   request.get('https://api.coinmarketcap.com/v1/ticker/', (err, response, body) => {
+   request.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', (err, response, body) => {
        let coinData = JSON.parse(body);
 
        console.log(coinData);
