@@ -10,16 +10,17 @@ const Alarm = require('../models/alarm');
 exports.configure = (app) => {
    // RESTful coin routes
    app.get('/api/coins', getCoinData);
-
 };
+
+// Requests to http://localhost:3000/api/coins will trigger a request to coin gecko API,
+// respond with a JSON object with coin prices, and log a message to the console.
 
 // Get latest coin data, get all created alarms,
 // determine if any alarms have thresholds that have been crossed,
 // return coin data in JSON format
 function getCoinData(req, res, done) {
 
-    let coin = 'ethereum'
-
+    const coin = 'ethereum'
     const url = `https://api.coingecko.com/api/v3/coins/${coin}?localization=false&tickers=true&market_data=false&community_data=false&developer_data=false&sparkline=false`
 
     axios.get(url, {})
@@ -51,9 +52,6 @@ function getCoinData(req, res, done) {
     });
 }
 
-
-// Requests to http://localhost:3000/api/coins will trigger a request to coin gecko API,
-// respond with a JSON object with coin prices, and log a message to the console.
 
 
 

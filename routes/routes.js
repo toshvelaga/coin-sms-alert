@@ -12,6 +12,6 @@ exports.configure = (app) => {
 
    // Add routes to the express app object
    coinDataRoutes.configure(app);
-//    alarmRoutes.configure(app);
+   // alarmRoutes.configure(app);
    smsRoutes.configure(app);
 };
