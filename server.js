@@ -1,12 +1,11 @@
 // server.js
 
 const express = require('express');
-const bodyParser = require('body-parser');
 const axios = require('axios')
 const app = express();
-
-// Use body-parser as middleware so that we have JSON data available on Request objects
-app.use(bodyParser.json({ type: 'application/json' }));
+const _ = require('underscore');
+// Import our new Alarm model
+const Alarm = require('./models/alarm');
 
 // Requests to http://localhost:3000/ will respond with a JSON object
 app.get('/', (req, res) => {
@@ -15,10 +14,34 @@ app.get('/', (req, res) => {
 
 // Requests to http://localhost:3000/api/coins will trigger a request to coin gecko API,
 // respond with a JSON object with coin prices, and log a message to the console.
+
+const url = 'https://api.coingecko.com/api/v3/coins/ethereum?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false'
+
 app.get('/api/coins', (req, res) => {
-    axios.get('https://api.coingecko.com/api/v3/coins/ethereum?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=false', {
+    axios.get(url, {
     })
-    .then(response => res.json(response.data))
+    .then(response => { 
+        let coinsData = response.data
+        // console.log(coinData)
+
+        // Hardcode an Alarm with a low value to ensure alarm will trigger
+        let alarm = new Alarm({
+           coin_id: 'ethereum',
+           priceUsdThreshold: 1000.00,
+           thresholdDirection: 'over'
+       });
+
+        // Find Bitcoin’s data object inside response collection
+       let latestCoinData = _.findWhere(coinsData, { id: alarm.coinId});
+
+       //  Log the alarm data to the console if the threshold is crossed
+       if (latestCoinData && alarm.isTriggered(latestCoinData)) {
+           console.log(`* ALARM * ${alarm.coinId}: $${latestCoinData.price_usd} is ${ alarm.thresholdDirection} threshold $${alarm.priceUsdThreshold}`);
+       }
+       // Return a JSON object of the CoinMarketCap API response
+       console.log(coinsData)
+       res.json(coinsData);
+    })
     .catch(err => { 
         res.json(err)
         console.log(err)
