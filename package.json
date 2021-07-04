@@ -19,6 +19,8 @@
   "homepage": "https://github.com/toshvelaga/coin-sms-alert#readme",
   "dependencies": {
     "axios": "^0.21.1",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "qs": "^6.7.0",
+    "request-promise": "^4.2.6"
   }
 }
