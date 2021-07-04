@@ -3,3 +3,5 @@ Get SMS alerts using twilio for crypto prices:
 - https://www.coingecko.com/en/api#explore-api
 
 - TODO: setup DynamoDB to persist coin data instead of mongoDB
+- TODO: setup cron job (scheduler to run code every 24 hours)
+- TODO: hosting
