@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
     res.json({ success: true });
 });
 
-// Requests to http://localhost:3000/api/coins will trigger a request to CoinMarketCap API,
+// Requests to http://localhost:3000/api/coins will trigger a request to coin gecko API,
 // respond with a JSON object with coin prices, and log a message to the console.
 app.get('/api/coins', (req, res) => {
     axios.get('https://api.coingecko.com/api/v3/coins/ethereum?localization=false&tickers=true&market_data=true&community_data=false&developer_data=false&sparkline=false', {
